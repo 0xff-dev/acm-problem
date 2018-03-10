@@ -4,4 +4,4 @@
 
     print ('Day Day up')
 
->学无止境, 加油yes
+>杭电LindaMan
