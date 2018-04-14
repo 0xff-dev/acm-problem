@@ -53,5 +53,17 @@ int main(){
     for( int i=0; i<=len; i++ )
         if( result[i]!=0 )
             cout << "第[" << i << "]件物品选中" << "weight: " << w[i] << " value: " << v[i] << endl;
+    cout << "一维数组解决: " << endl;
+    int tmp[100];
+    memset(tmp, 0, sizeof(tmp));
+    for( int i=1; i<=len; i++ ){
+        for ( int v1=max_value; v1>=w[i]; v1-- ){
+            if( tmp[v1]<tmp[v1-w[i]]+v[i])
+                tmp[v1]=tmp[v1-w[i]]+v[i];
+        }
+    }
+    for( int i=1; i<=max_value; i++)
+        cout << tmp[i] << " ";
+    cout << "max: " << tmp[max_value] << endl;
     return 0;
 }
