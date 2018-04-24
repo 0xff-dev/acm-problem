@@ -10,13 +10,12 @@ using namespace std;
 const int LEN=1000;
 
 
-
 inline int LEFT(int i){
     return i*2;
 }
 
 
-int RIGHT(int i){
+inline int RIGHT(int i){
     return 1+i*2;
 }
 
