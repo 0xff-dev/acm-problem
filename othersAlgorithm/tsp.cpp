@@ -34,8 +34,13 @@ void TSP(int** road, int len, int start){
             if( (road[city_ids[i]][city_ids[i-1]] && res+road[city_ids[i]][city_ids[i-1]]<best_length)|| 
                 best_length == 0 ){
                 swap(city_ids[i], city_ids[start]);
+                /**解释一下, 为啥子是start-1, 
+                 * 考虑当前start的位置, 全排列的思想是a(b(c(d)))这样的,以一个开始, 其他递归交换
+                 * 所以,这里从第二个城市开始, 加上前面的距离, 剩下的递归再加到res中
+                 */
                 res+=road[city_ids[start-1]][city_ids[start]];
                 TSP(road, len, start+1);
+                //当进行下一轮交换的时候，把之前的结果减去
                 res-=road[city_ids[start-1]][city_ids[start]];
                 swap(city_ids[i], city_ids[start]);
             }
@@ -48,6 +53,7 @@ int main(){
     //初始化城市标号
     for( int i=0; i<len; i++ )
         city_ids[i]=i;
+    //输入有几条路径
     int roads;
     road = new int*[CITYS];
     for(int i=0; i<CITYS; i++){
@@ -65,12 +71,14 @@ int main(){
     for(int i=0; i<len; i++){
         for(int j=0; j<len; j++){
             if( i==j )
+                //完成上面的输入没有不完成的部分, 自己到自己的距离是0
                 road[i][j]=0;
             cout << road[i][j] << " ";
         }
         cout << endl;
     }
     best_length = 0;
+    res = 0;
     TSP(road, len, 1);
     cout << "最佳路径长度是: " << best_length << endl;
     for( int i=0; i<CITYS; i++ ){
