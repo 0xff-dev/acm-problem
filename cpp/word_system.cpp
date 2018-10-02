@@ -17,11 +17,101 @@ typedef vector<string> text;
 typedef pair<text*, location*> text_location;
 
 
+void suffix_s(string word){
+    /**
+     *  babies, ius, s
+    **/
+    string::size_type pos3 = word.size() - 3;
+    string ies("ies");
+    if(!word.compare(pos3, 3, ies)){
+        // 10种重载方式......
+        word.replace(pos3, 3, 1, 'y');
+        return;
+    }
+
+    string ses("ses");
+    if(!word.compare(pos3, 3, ses)){
+        // 只要删除es即可
+        word.erase(pos3+1, 2);
+    }
+
+    string::size_type spos = 0;
+    string suffixs("oussisius");
+    if(!word.compare(pos3, 3, suffixs, spos, 3) || !word.compare(pos3, 3, suffixs, spos+6, 3) ||
+        !word.compare(pos3+1, 2, suffixs, spos+4, 2) || !word.compare(pos3+1, 2, suffixs, spos+2, 2)){
+            return;
+    }
+}
+
+
+void suffix_text(vector<string>* words){
+    /**
+     * 去掉以s结尾的单词
+    **/
+    vector<string>::iterator iter_begin = words->begin();
+    vector<string>::iterator iter_end = words->end();
+    while(iter_begin != iter_end){
+        if((*iter_begin).size() <= 3){
+            /* 长度小于3的单词忽略 */
+            iter_begin ++;
+        }
+        else if((*iter_begin)[(*iter_begin).size()-1] == 's'){
+            /* 以s结尾 */
+            suffix_s(*iter_begin);
+            iter_begin ++;
+        }
+    }
+}
+
+
+void strip_cap(vector<string>* words){
+    /**
+     * 去除文本中, 所有的大写字母, 全市小写的单词
+    **/
+    vector<string>::iterator iter_begin = words->begin();
+    vector<string>::iterator iter_end = words->end();
+
+    string caps("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    while(iter_begin != iter_end){
+        string::size_type pos=0;
+        while((pos=(*iter_begin).find_first_of(caps, pos)) != string::npos){
+            (*iter_begin)[pos] = tolower((*iter_begin)[pos]);
+        }
+        iter_begin++;
+    }
+}
+
+
+void filter_text(vector<string>* words, string filter){
+    /**
+     * 去掉单词中不需要的字符, ",.?()等
+    **/
+    vector<string>::iterator iter_begin = words->begin();
+    /* 在遍历的时候，对原数据做了修改，所以把end()先提出来 */
+    vector<string>::iterator iter_end = words->end();
+    if(!filter.size()){
+       filter.insert(0, "\".,");
+    }
+    while(iter_begin != iter_end){
+       string::size_type pos=0;
+       while((pos=(*iter_begin).find_first_of(filter, pos)) != string::npos){
+           /**
+            * erase(pos, n);
+            * erase(position); position 是string的迭代器
+            * erase(first, second); 从first- second删除
+           **/
+           (*iter_begin).erase(pos, 1);
+       }
+       iter_begin++;
+    }
+}
+
+
 text_location* separate_words(const vector<string>* text_file){
     /**
      * words 包含独立的单词集合
      * locations 包含单词的行列信息
-    */
+    **/
     vector<string>*  words = new vector<string>;
     vector<location_pair>* locations = new vector<location_pair>;
     short line_num = 0;
@@ -37,6 +127,8 @@ text_location* separate_words(const vector<string>* text_file){
         }
         words->push_back(text_line.substr(pre_pos, pos-pre_pos));
         locations->push_back(location_pair(line_num, word_pos));
+        filter_text(words, "\",.;:!?)(\\/");
+        strip_cap(words);    //忽略大小写
     }
     return new text_location(words, locations);
 }
@@ -45,7 +137,7 @@ text_location* separate_words(const vector<string>* text_file){
 vector<string>* retrieve_text(){
     /**
      * 主要学会文件的读写
-    */
+    **/
     string file_name;
     cout << "input file name: "; cin >> file_name;
     ifstream infile(file_name.c_str(), ios::in);
@@ -98,7 +190,6 @@ int main(){
         cout << "Word: " << (*text_locations_text)[index] << " Location: ("
              << (*text_locations_locations)[index].first << ", "
              << (*text_locations_locations)[index].second << ")" << endl;
-
     }
     return 0;
 }
