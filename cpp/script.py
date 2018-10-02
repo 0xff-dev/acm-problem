@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from functools import 
 with open('./data.txt', 'w') as fp:
     for i in range(1, 10):
         data = ' '.join(str(i) for j in range(i))
