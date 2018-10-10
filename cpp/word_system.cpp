@@ -6,6 +6,7 @@
 #include <iterator>
 #include <utility>
 #include <set>
+#include <map>
 
 
 using namespace std;
@@ -15,6 +16,11 @@ typedef pair<short, short> location_pair;
 typedef vector<location_pair> location;
 typedef vector<string> text;
 typedef pair<text*, location*> text_location;
+typedef map<string, location*> text_map;
+typedef text_map::value_type tmvt;
+/* 单词排除集合, 嗝屁的 */
+typedef set<string>::difference_type diff_type;
+set<string> exclusion_set;
 
 
 void suffix_s(string word){
@@ -133,6 +139,51 @@ text_location* separate_words(const vector<string>* text_file){
     return new text_location(words, locations);
 }
 
+extern text_map* build_word_map(const text_location* text_locations){
+    /**
+     * 使用word_map[key] key不存在, 则插入一个对象, value是缺省的默认值
+    */
+    text_map* word_map = new text_map();
+    vector<string>* text_words = text_locations->first;
+    vector<location_pair>* text_locs = text_locations->second;
+    int elem_cnt = text_words->size();
+    for( int i=0; i<elem_cnt; i++){
+        /**
+         * 单词的长度和是否存在
+        */
+       string word = (*text_words)[i];
+       /* 因为我的数据都是1-9所以，加这个条件会导致没，没有数据输出.
+       if(word.size() < 3){
+           continue;
+       }*/
+       if(!word_map->count((*text_words)[i])){
+           /**/
+           location* loc = new location();
+           loc->push_back((*text_locs)[i]);
+           word_map->insert(tmvt(word, loc));
+       }
+       else{
+           (*word_map)[word]->push_back((*text_locs)[i]);
+       }
+    }
+    return word_map;
+}
+
+
+void display_map_text(text_map* word_map){
+    text_map::iterator iter = word_map->begin();
+    while(iter != word_map->end()){
+        cout << iter->first << ": ";
+        location::iterator loc_iter = iter->second->begin();
+        while(loc_iter != iter->second->end()){
+            cout << "<" << loc_iter->first << ", " << loc_iter->second << "> ";
+            loc_iter ++;
+        }
+        cout << "\n";
+        iter++;
+    }
+}
+
 
 vector<string>* retrieve_text(){
     /**
@@ -150,7 +201,7 @@ vector<string>* retrieve_text(){
     string text_line;
     typedef pair<string::size_type, int> stats;
     stats maxline;
-    int line_num;
+    int line_num = 0;
     while(getline(infile, text_line, '\n')){
         cout << "line read: " << text_line << '\n';
         if(maxline.first << text_line.size()){
@@ -169,6 +220,26 @@ vector<string>* retrieve_text(){
     return line_of_text;
 }
 
+/*
+void get_exclusion_set(){
+    ifstream infile("exclusion_set.txt");
+    if(!infile){
+        static string default_excluded_words[25] = {
+            "the","and","but","that","then","are","been",
+            "can","can't","cannot","could","did","for",
+            "had","have","him","his","her","its","into",
+            "were","which","when","with","would"
+        };
+        cerr << "Unable to open file exclusion_set.txt, Use default exslusion" << endl;
+        copy(default_excluded_words, default_excluded_words+25, 
+             inserter(exclusion_set, exclusion_set.begin()));
+    }
+    else{
+        istream_iterator<string, diff_type> ;
+
+    }
+}
+*/
 
 void print(vector<string>* svec){
     vector<string>::const_iterator iter = svec->begin();
@@ -191,5 +262,7 @@ int main(){
              << (*text_locations_locations)[index].first << ", "
              << (*text_locations_locations)[index].second << ")" << endl;
     }
+    text_map* text_map_res = build_word_map(text_locations);
+    display_map_text(text_map_res);
     return 0;
 }
