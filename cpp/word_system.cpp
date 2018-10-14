@@ -153,7 +153,7 @@ extern text_map* build_word_map(const text_location* text_locations){
         */
        string word = (*text_words)[i];
        /* 因为我的数据都是1-9所以，加这个条件会导致没，没有数据输出.
-       if(word.size() < 3){
+       if(word.size() < 3 || exclusion_set.count(word)){
            continue;
        }*/
        if(!word_map->count((*text_words)[i])){
@@ -220,7 +220,7 @@ vector<string>* retrieve_text(){
     return line_of_text;
 }
 
-/*
+
 void get_exclusion_set(){
     ifstream infile("exclusion_set.txt");
     if(!infile){
@@ -235,11 +235,11 @@ void get_exclusion_set(){
              inserter(exclusion_set, exclusion_set.begin()));
     }
     else{
-        istream_iterator<string, diff_type> ;
-
+        istream_iterator<string, diff_type> input_set(infile), eof;
+        copy(input_set, eof, inserter(exclusion_set, exclusion_set.begin()));
     }
 }
-*/
+
 
 void print(vector<string>* svec){
     vector<string>::const_iterator iter = svec->begin();
