@@ -19,5 +19,6 @@ class Solution:
             nums1[index] = v
             pre_index = index
             m += 1
+            
 obj = Solution()
 print(obj.merge([1,2,3,0,0,0], 3, [2,5,6], 3))
