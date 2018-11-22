@@ -31,6 +31,3 @@ class Solution:
                         search(row+1)
         search(0)
         return res
-
-obj = Solution()
-print(obj.solveNQueens(4))
