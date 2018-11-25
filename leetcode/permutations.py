@@ -9,7 +9,8 @@ class Solution:
         length = len(nums)
         def generate(nums, start):
             if start == len(nums)-1:
-                res.append(json.loads(json.dumps(nums)))
+                if nums not in res:
+                    res.append(json.loads(json.dumps(nums)))
                 return
             else:
                 for i in range(start, len(nums)):
@@ -22,4 +23,3 @@ class Solution:
 
 obj = Solution()
 print(obj.permute([1, 2, 3]))
-print(obj.permute([2, 3, 4, 5]))
