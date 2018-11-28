@@ -5,7 +5,7 @@ class Solution:
         :rtype: int
         """
         lenth = len(nums)
-        if lenth == 0:
+        if lenth == 0 or lenth == 1:
             return 0
         res, index = 1, 1
         can_reach, next_can_reach = nums[0], 0
