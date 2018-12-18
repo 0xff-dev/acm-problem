@@ -20,7 +20,7 @@ class Solution:
         if cf:
             digits.insert(0, cf)
         return digits
-
+        
 
 obj = Solution()
 print(obj.plusOne([1,2,3]))
