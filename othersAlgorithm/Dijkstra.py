@@ -29,14 +29,15 @@ for i in range(5):
     min_dis = max_length
     min_index = -1
     for j in range(6):
-        if not visited[j] and dis_map[i][j] < min_dis:
+        if not visited[j] and dis[j]< min_dis:
             min_dis = dis_map[i][j]
             min_index = j
     visited[min_index] = True
     for index in range(6):
-        if dis_map[min_index][index] < max_length:
-            if dis[index] > dis_map[min_index][index] + dis[min_index]:
-                dis[index] = dis_map[min_index][index] + dis[min_index]
+       if dis_map[min_index][index] < max_length:
+           if dis[index] > dis[min_index] + dis_map[min_index][index]:
+               dis[index] = dis[min_index]+dis_map[min_index][index]
+               
 print(dis)
 
 
