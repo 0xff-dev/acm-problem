@@ -76,7 +76,7 @@ class LinkList(object):
         :return:
         """
         p, q = self.head, self.head.next
-        while q is not None and q != p:
+        while q is not None and q.next is not None and q != p:
             q = q.next.next
             p = p.next
         if q != p:
