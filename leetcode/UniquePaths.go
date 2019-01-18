@@ -1,5 +1,4 @@
-package main
-
+package test
 import "fmt"
 
 func uniquePaths(m int, n int) int {
@@ -17,9 +16,4 @@ func uniquePaths(m int, n int) int {
 		}
 	}
 	return auxiMap[n-1][m-1]
-}
-func main() {
-	fmt.Println(uniquePaths(23, 12))
-	fmt.Println(uniquePaths(3, 2))
-	fmt.Println(uniquePaths(7, 3))
 }
