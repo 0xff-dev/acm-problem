@@ -5,13 +5,14 @@
 
 int main() {
     char t[maxn], s[maxn];
+    int i, j;
     while(scanf("%s", s+1)) {
         getchar();
         scanf("%s", t+1);
         int dp[maxn][maxn] = {0};
         int lenS = strlen(s+1), lenT = strlen(t+1);
-        for( int i=1; i<=lenT; i++) {
-            for( int j=1; j<=lenS; j++){
+        for( i=1; i<=lenT; i++) {
+            for( j=1; j<=lenS; j++){
                 if(t[i] == s[j]){
                     dp[j][i] = dp[j-1][i-1]+1;
                 } else {
