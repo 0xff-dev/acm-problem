@@ -21,6 +21,7 @@ bool init() {
     int pos = maxn/2;
     sum[pos] = root;
     build(pos-1), build(pos+1);
+    return true;
 }
 
 int main() {
