@@ -37,10 +37,11 @@ func main() {
 	for _, item := range data[1:] {
 		if item[0] > now[1] {
 			trees += item[1] - item[0] + 1
+            now = item
 		} else if item[1] > now[1] {
 			trees += item[1] - now[1]
+            now[1] = item[1]
 		}
-		now = item
 	}
 	fmt.Println(trees)
 }
